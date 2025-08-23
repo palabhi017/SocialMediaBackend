@@ -1,21 +1,19 @@
 // const comment = require("../Models/commentModel")
 
 const getUserComments = (req, res) => {
-    try {
-
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send("Err :", err.message)
-    }
-}
+  try {
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Err :", err.message);
+  }
+};
 
 const postUserComments = (req, res) => {
-    try {
+  try {
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ err: err.message });
+  }
+};
 
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).json({ err: err.message })
-    }
-}
-
-module.exports = { getUserComments, postUserComments }
+export { getUserComments, postUserComments };

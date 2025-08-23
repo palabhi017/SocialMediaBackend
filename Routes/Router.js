@@ -1,11 +1,12 @@
-const express = require("express");
-const AuthRouter = require("./AuthRoute");
-const commentRouter = require("./commentRoute");
-const allRouter=express.Router()
-
+import express from "express";
+import AuthRouter from "./AuthRoute.js";
+import commentRouter from "./commentRoute.js";
+import postRouter from "./postRoute.js";
+import authMiddleware from "../Middlewares/AuthMiddleware.js";
+const allRouter = express.Router();
 
 allRouter.use("/auth", AuthRouter);
-allRouter.use("/comment",commentRouter)
+allRouter.use("/comment", authMiddleware, commentRouter);
+allRouter.use("/post", authMiddleware, postRouter);
 
-
-module.exports=allRouter
+export default allRouter;
