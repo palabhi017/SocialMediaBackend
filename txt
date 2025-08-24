@@ -40,7 +40,7 @@ const postUserComments = async (req, res) => {
         })
         const populatedComment =await comment.aggregate([
             {
-                $match: { _id: new mongoose.Types.ObjectId(createcomment._id) }
+                $match: { postId: new mongoose.Types.ObjectId(postId) }
             },
             {
                 $lookup: {
