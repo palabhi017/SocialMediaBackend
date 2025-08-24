@@ -5,7 +5,7 @@ import {
 } from "../Controllers/commentController.js";
 const commentRouter = express.Router();
 
-commentRouter.get("/getComment", getUserComments);
+commentRouter.get("/getComment/:postId", getUserComments);
 commentRouter.post("/postComment", postUserComments);
 
 export default commentRouter;

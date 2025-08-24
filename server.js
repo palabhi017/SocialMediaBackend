@@ -23,10 +23,11 @@ app.set("io", io);
 //middlewares
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 //routes
-
-app.use("/", allRouter);
+app.use("/api", allRouter)
 
 mongoose
   .connect(process.env.MONGO_URL)
