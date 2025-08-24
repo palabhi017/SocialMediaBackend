@@ -1,7 +1,6 @@
 import cloudinary from "../Config/Cloudinary.js";
-import fs from "fs";
+import { emitToAll } from "../Config/SocketService.js";
 import post from "../Models/PostModel.js";
-import { lookup } from "dns";
 
 const createPost = async (req, res) => {
   try {
@@ -18,7 +17,8 @@ const createPost = async (req, res) => {
       ImagePublicId: result.public_id,
     });
     let data = await PostObj.save();
-
+    const io = req.app.get("io");
+    emitToAll(io, "new_post", data);
     res.status(201).json({ message: "Success", data });
   } catch (err) {
     res.status(500).json({ err: err.message });
