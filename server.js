@@ -13,8 +13,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "localhost:5173",
-    method: ["GET", "POST"],
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
   },
 });
 
@@ -25,14 +25,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 //routes
-app.use("/api", allRouter)
+app.use("/api", allRouter);
 
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
       console.log(`server is running on port ${process.env.PORT}`);
     });
   })
