@@ -27,7 +27,7 @@ const signUpUser = async (req, res) => {
     console.log(token);
     return res
       .status(201)
-      .json({ message: "User Created Successfully", token });
+      .json({ message: "User Created Successfully", token, userData: data });
   } catch (error) {
     console.log(error);
     return res.status(500).send("Server error");
