@@ -1,7 +1,7 @@
-const User = require("../Models/AuthModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
+import User from "../Models/AuthModel.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 dotenv.config();
 
 const signUpUser = async (req, res) => {
@@ -39,6 +39,7 @@ const loginUser = async (req, res) => {
 
   try {
     let isUser = await User.findOne({ Email });
+    console.log(isUser, "isUserisUser");
     if (!isUser)
       return res
         .status(400)
@@ -48,17 +49,15 @@ const loginUser = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
-    let token = jwt.sign({ id: isUser._id }, process.env.SECRET_KEY, {
-      expiresIn: "1d",
-    });
-
+    let token = jwt.sign({ id: isUser._id }, process.env.SECRET_KEY);
+    console.log(isUser, "isUserisUser");
     return res
       .status(200)
-      .json({ message: "User Loged In Successfully", token });
+      .json({ message: "User Loged In Successfully", token, userData: isUser });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Server Error" });
   }
 };
 
-module.exports = { signUpUser, loginUser };
+export { signUpUser, loginUser };

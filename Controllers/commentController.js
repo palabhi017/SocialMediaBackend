@@ -1,10 +1,31 @@
-const comment = require("../Models/commentModel")
+import mongoose from "mongoose";
+import comment from "../Models/commentModel.js";
+
 
 const getUserComments = async (req, res) => {
     try {
-        console.log("oooooooooooooooo")
-        const createcomment = await comment.find({})
-        console.log(createcomment, "createcomment")
+        const { postId } = req.params
+
+        const createcomment = await comment.aggregate([
+            {
+                $match: { postId: new mongoose.Types.ObjectId(postId) }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$user",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ])
+
         res.status(200).json(createcomment)
     } catch (err) {
         console.log(err.message)
@@ -19,11 +40,9 @@ const postUserComments = async (req, res) => {
         })
         console.log(createcomment, "createcommentcreatecomment")
         res.status(200).json({ ...createcomment._doc })
-
     } catch (err) {
         console.log(err.message)
-        res.status(500).json({ err: err.message })
+        return res.status(500).send({ err: err })
     }
 }
-
-module.exports = { getUserComments, postUserComments }
+export { getUserComments, postUserComments };
