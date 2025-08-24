@@ -38,8 +38,9 @@ const postUserComments = async (req, res) => {
         const createcomment = await comment.create({
             ...req.body
         })
-        console.log(createcomment, "createcommentcreatecomment")
-        res.status(200).json({ ...createcomment._doc })
+        const populatedComment = await comment.findById(createcomment._id).populate('userId');
+
+        res.status(200).json({ ...populatedComment})
     } catch (err) {
         console.log(err.message)
         return res.status(500).send({ err: err })
