@@ -1,8 +1,8 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const allRouter=require("./Routes/Router")
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import allRouter from "./Routes/Router.js";
+import dotenv from "dotenv";
 dotenv.config();
 
 //Express
@@ -11,9 +11,11 @@ const app = express();
 //middlewares
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 //routes
-app.use("/", allRouter)
+app.use("/api", allRouter)
 
 mongoose
   .connect(process.env.MONGO_URL)
