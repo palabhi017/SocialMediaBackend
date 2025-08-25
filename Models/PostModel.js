@@ -20,6 +20,9 @@ const postSchema = mongoose.Schema(
     Location: {
       type: String,
     },
+    commentCount: {
+      type: Number,
+    }
   },
   {
     timestamps: true,
