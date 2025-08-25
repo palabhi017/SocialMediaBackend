@@ -1,17 +1,16 @@
+
 const initializeSocket = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
     // Handle user joining
     socket.on("user_joined", (userId) => {
-      connectedUsers.set(socket.id, userId);
       console.log(`User ${userId} connected with socket ${socket.id}`);
     });
 
     // Handle disconnection
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
-      connectedUsers.delete(socket.id);
     });
   });
 

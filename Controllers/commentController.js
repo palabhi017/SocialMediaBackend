@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import comment from "../Models/commentModel.js";
+import { emitToAll } from "../Config/SocketService.js";
+import post from "../Models/PostModel.js";
 
 
 const getUserComments = async (req, res) => {
@@ -23,6 +25,11 @@ const getUserComments = async (req, res) => {
                     path: "$user",
                     preserveNullAndEmptyArrays: true
                 }
+            },
+            {
+                $sort: {
+                    createdAt: -1
+                }
             }
         ])
 
@@ -38,7 +45,8 @@ const postUserComments = async (req, res) => {
         const createcomment = await comment.create({
             ...req.body
         })
-        const populatedComment =await comment.aggregate([
+        await post.findByIdAndUpdate(createcomment.postId, { $inc: { commentCount: 1 } })
+        const populatedComment = await comment.aggregate([
             {
                 $match: { _id: new mongoose.Types.ObjectId(createcomment._id) }
             },
@@ -57,9 +65,15 @@ const postUserComments = async (req, res) => {
                 }
             }
         ])
-        //  await comment.findById(createcomment._id).populate('userId');
 
-        res.status(200).json({ ...populatedComment[0]})
+        console.log(populatedComment[0], " populatedComment[0]")
+
+        const io = req.app.get("io");
+        emitToAll(io, "commentCount", createcomment.postId);
+        emitToAll(io, "newComment", populatedComment[0]);
+
+
+        res.status(200).json({ ...populatedComment[0] })
     } catch (err) {
         console.log(err.message)
         return res.status(500).send({ err: err })
