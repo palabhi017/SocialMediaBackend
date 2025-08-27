@@ -13,6 +13,18 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  ProfileImg: {
+    type: String,
+  },
+  ProfilePicPublicId: {
+    type: String,
+  },
+  City: {
+    type: String,
+  },
+  Gender: {
+    type: String,
+  },
 });
 
 export default mongoose.model("user", UserSchema);

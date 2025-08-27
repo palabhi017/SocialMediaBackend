@@ -2,8 +2,8 @@ import User from "../Models/AuthModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import cloudinary from "../Config/Cloudinary.js";
 dotenv.config();
-
 const signUpUser = async (req, res) => {
   const { Name, Email, Password } = req.body;
   try {
@@ -60,4 +60,31 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { signUpUser, loginUser };
+const editUserProfile = async (req, res) => {
+  console.log(req.userId, "userIduserId");
+  const id = req.userId;
+
+  try {
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: "profileImg",
+    });
+    let data = await User.findByIdAndUpdate(
+      id,
+      {
+        ProfileImg: result.secure_url,
+        ProfilePicPublicId: result.public_id,
+        City: req.City,
+      },
+      { new: true, runValidators: true }
+    );
+    console.log(data);
+    res.status(201).json({ message: "Success", data });
+  } catch (error) {
+    res.status(500).json({ err: error.message });
+  }
+};
+
+export { signUpUser, loginUser, editUserProfile };

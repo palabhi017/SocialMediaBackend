@@ -12,7 +12,7 @@ const authMiddleware = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-
+    console.log(decoded, "decodeddecoded");
     // Attach only the user ID to request (no database call)
     req.userId = decoded.id;
     next();

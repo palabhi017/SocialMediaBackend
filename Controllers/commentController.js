@@ -3,10 +3,9 @@ import comment from "../Models/commentModel.js";
 import { emitToAll } from "../Config/SocketService.js";
 import post from "../Models/PostModel.js";
 
-
 const getUserComments = async (req, res) => {
-    try {
-        const { postId } = req.params
+  try {
+    const { postId } = req.params;
 
         const createcomment = await comment.aggregate([
             {
@@ -33,12 +32,12 @@ const getUserComments = async (req, res) => {
             }
         ])
 
-        res.status(200).json(createcomment)
-    } catch (err) {
-        console.log(err.message)
-        res.status(500).send("Err :", err.message)
-    }
-}
+    res.status(200).json(createcomment);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Err :", err.message);
+  }
+};
 
 const postUserComments = async (req, res) => {
     try {
