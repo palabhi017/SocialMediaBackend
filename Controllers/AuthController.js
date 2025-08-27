@@ -71,11 +71,15 @@ const editUserProfile = async (req, res) => {
     const result = await cloudinary.uploader.upload(dataURI, {
       folder: "profileImg",
     });
-    let data = await User.findByIdAndUpdate(id, {
-      ProfileImg: result.secure_url,
-      ProfilePicPublicId: result.public_id,
-      City: req.City,
-    });
+    let data = await User.findByIdAndUpdate(
+      id,
+      {
+        ProfileImg: result.secure_url,
+        ProfilePicPublicId: result.public_id,
+        City: req.City,
+      },
+      { new: true, runValidators: true }
+    );
     console.log(data);
     res.status(201).json({ message: "Success", data });
   } catch (error) {

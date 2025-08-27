@@ -11,7 +11,7 @@ const AuthRouter = express.Router();
 
 AuthRouter.post("/signup", signUpUser);
 AuthRouter.post("/login", loginUser);
-AuthRouter.post(
+AuthRouter.patch(
   "/editProfile",
   authMiddleware,
   upload.single("Image"),
